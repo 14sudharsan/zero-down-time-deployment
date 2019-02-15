@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx-r4.12
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        name: nginx
+        version: "r4.12"
+    spec:
+      containers:
+        - name: nginx
+          image: 14sudharsan/r4.12
+          imagePullPolicy: IfNotPresent
+#          env:
+#          - name: DEMO_GREETING
+#            value: "Hello from the environment"
+#          - name: DEMO_FAREWELL
+#            value: "Such a sweet sorrow"
+#          - name: KUBE_CONFIG_1
+#            valueFrom:
+#              configMapKeyRef:
+#                name: test-configmap
+#                key: data-1
+#          - name: KUBE_CONFIG_2
+#            valueFrom:
+#              configMapKeyRef:
+#                name: test-configmap
+#                key: data-2     
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+          - mountPath: "/usr/share/nginx/html"
+            name: docroot
+      volumes:
+        - name: docroot
+          persistentVolumeClaim:
+           claimName: claimnginx
